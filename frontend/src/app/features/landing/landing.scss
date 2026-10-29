@@ -1,0 +1,41 @@
+:host {
+  display: block;
+}
+
+.landing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+
+  &__hero {
+    max-width: 560px;
+    text-align: center;
+    padding: 2rem;
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin: 0 0 1rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #5b6574;
+      margin: 0 0 2rem;
+    }
+  }
+
+  &__cta {
+    display: inline-block;
+    padding: 0.75rem 1.75rem;
+    background: #0b6ef0;
+    color: #fff;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      background: #0a63d6;
+    }
+  }
+}

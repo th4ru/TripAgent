@@ -1,0 +1,42 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e5e8ef;
+  background: #fff;
+
+  &__brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0b6ef0;
+    text-decoration: none;
+  }
+
+  &__nav {
+    display: flex;
+    gap: 1.25rem;
+
+    a {
+      color: #42526e;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover,
+      &--active {
+        color: #0b6ef0;
+      }
+    }
+  }
+}
+
+.app-main {
+  flex: 1;
+  padding: 1.5rem 2rem;
+}

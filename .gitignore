@@ -1,0 +1,35 @@
+# ===== .NET =====
+bin/
+obj/
+*.user
+.vs/
+*.userprefs
+*.suo
+[Dd]ebug/
+[Rr]elease/
+
+# Local configuration files that may contain credentials
+appsettings.Development.json
+*.local.json
+
+# ===== Node / Angular =====
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+
+# ===== Environment / secrets =====
+.env
+.env.*
+
+# ===== IDE / OS =====
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+Thumbs.db
+Desktop.ini
+
+# ===== Logs =====
+*.log

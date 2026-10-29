@@ -1,0 +1,50 @@
+<section class="chat">
+  <header class="chat__header">
+    <div>
+      <h1>AI Travel Assistant</h1>
+      <p>Powered by your n8n travel agent</p>
+    </div>
+  </header>
+
+  <div class="chat__messages" #messagesContainer>
+    @for (message of messages(); track message.id) {
+      <article class="chat__message" [class.chat__message--user]="message.role === 'user'">
+        <span class="chat__avatar">{{ message.role === 'user' ? 'You' : 'AI' }}</span>
+        <div class="chat__bubble">{{ message.text }}</div>
+      </article>
+    }
+
+    @if (sending()) {
+      <article class="chat__message">
+        <span class="chat__avatar">AI</span>
+        <div class="chat__bubble chat__bubble--typing" aria-label="Assistant is typing">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </article>
+    }
+  </div>
+
+  @if (error()) {
+    <p class="chat__error" role="alert">{{ error() }}</p>
+  }
+
+  <div class="chat__suggestions">
+    @for (suggestion of suggestions; track suggestion) {
+      <button type="button" (click)="useSuggestion(suggestion)" [disabled]="sending()">
+        {{ suggestion }}
+      </button>
+    }
+  </div>
+
+  <div class="chat__composer">
+    <textarea
+      [(ngModel)]="draft"
+      (keydown)="onKeydown($event)"
+      rows="2"
+      placeholder="Ask about destinations, budgets, itineraries..."
+      [disabled]="sending()"></textarea>
+    <button type="button" (click)="send()" [disabled]="sending() || !draft.trim()">Send</button>
+  </div>
+</section>
