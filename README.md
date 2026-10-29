@@ -147,6 +147,14 @@ Configure the webhook in `backend/src/TripPlanner.Api/appsettings.Development.js
 - The API sends `{ "action": "sendMessage", "sessionId": "...", "chatInput": "...", "message": "..." }`
   and extracts the reply from `reply`, `output`, `text`, `answer`, `response`, `message` or `content`.
 - The chat UI lives at `/chat` (nav link: **AI Assistant**).
+- Each conversation has its own `sessionId` (stored per user in `localStorage`). The API
+  prefixes it with the user id, so n8n memory is private and cannot be shared between accounts.
+- **New chat** in the chat header generates a fresh `sessionId` and clears the transcript,
+  which resets the agent's memory for a brand-new conversation.
+
+The landing page (`/`) uses a dependency-free canvas "neural network" background
+(`features/landing/neural-background`) that reacts to the pointer and falls back to a single
+static frame when `prefers-reduced-motion` is set.
 
 ## Current status
 

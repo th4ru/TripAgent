@@ -1,14 +1,29 @@
 <section class="chat">
   <header class="chat__header">
-    <div>
-      <h1>AI Travel Assistant</h1>
-      <p>
-        Powered by your n8n travel agent
-        @if (userLabel) {
-          <span> · {{ userLabel }}</span>
-        }
-      </p>
+    <div class="chat__identity">
+      <span class="chat__orb" aria-hidden="true">AI</span>
+      <div>
+        <h1>AI Travel Assistant</h1>
+        <p>
+          Powered by your n8n travel agent
+          @if (userLabel) {
+            <span> &middot; {{ userLabel }}</span>
+          }
+        </p>
+      </div>
     </div>
+
+    <button
+      class="chat__new"
+      type="button"
+      (click)="newChat()"
+      [disabled]="sending()"
+      title="Start a new conversation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+      New chat
+    </button>
   </header>
 
   <div class="chat__messages" #messagesContainer>

@@ -23,22 +23,14 @@ export class Chatbot implements AfterViewChecked {
     'Best time to visit Sigiriya'
   ];
 
-  readonly messages = signal<ChatMessage[]>([
-    {
-      id: crypto.randomUUID(),
-      role: 'assistant',
-      text: 'Hi! I am your AI travel assistant. Tell me where you want to go and I will help you plan the trip.',
-      createdAt: new Date()
-    }
-  ]);
-
+  readonly messages = signal<ChatMessage[]>([createWelcomeMessage()]);
   readonly sending = signal(false);
   readonly error = signal<string | null>(null);
   readonly userLabel = this.auth.displayName();
 
   draft = '';
 
-  private readonly sessionId = this.loadSessionId();
+  private readonly sessionId = signal(this.loadSessionId());
   private shouldScroll = false;
 
   ngAfterViewChecked(): void {
@@ -65,6 +57,21 @@ export class Chatbot implements AfterViewChecked {
     }
   }
 
+  newChat(): void {
+    if (this.sending()) {
+      return;
+    }
+
+    const sessionId = crypto.randomUUID();
+    this.sessionId.set(sessionId);
+    this.persistSessionId(sessionId);
+
+    this.messages.set([createWelcomeMessage()]);
+    this.error.set(null);
+    this.draft = '';
+    this.shouldScroll = true;
+  }
+
   send(): void {
     const message = this.draft.trim();
     if (!message || this.sending()) {
@@ -77,7 +84,7 @@ export class Chatbot implements AfterViewChecked {
     this.sending.set(true);
     this.shouldScroll = true;
 
-    this.chatService.send(message, this.sessionId).subscribe({
+    this.chatService.send(message, this.sessionId()).subscribe({
       next: (response) => {
         this.append({
           role: 'assistant',
@@ -109,21 +116,39 @@ export class Chatbot implements AfterViewChecked {
     ]);
   }
 
-  private loadSessionId(): string {
-    const userId = this.auth.user()?.id ?? 'anonymous';
-    const key = `${SESSION_KEY}:${userId}`;
+  private sessionStorageKey(): string {
+    return `${SESSION_KEY}:${this.auth.user()?.id ?? 'anonymous'}`;
+  }
 
+  private loadSessionId(): string {
     try {
-      const existing = localStorage.getItem(key);
+      const existing = localStorage.getItem(this.sessionStorageKey());
       if (existing) {
         return existing;
       }
-
-      const created = crypto.randomUUID();
-      localStorage.setItem(key, created);
-      return created;
     } catch {
-      return crypto.randomUUID();
+      // Storage unavailable; fall through to an in-memory id.
+    }
+
+    const created = crypto.randomUUID();
+    this.persistSessionId(created);
+    return created;
+  }
+
+  private persistSessionId(sessionId: string): void {
+    try {
+      localStorage.setItem(this.sessionStorageKey(), sessionId);
+    } catch {
+      // Ignore storage failures.
     }
   }
+}
+
+function createWelcomeMessage(): ChatMessage {
+  return {
+    id: crypto.randomUUID(),
+    role: 'assistant',
+    text: 'Hi! I am your AI travel assistant. Tell me where you want to go and I will help you plan the trip.',
+    createdAt: new Date()
+  };
 }
