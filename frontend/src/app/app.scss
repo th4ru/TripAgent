@@ -8,6 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   padding: 1rem 2rem;
   border-bottom: 1px solid #e5e8ef;
   background: #fff;
@@ -21,6 +22,7 @@
 
   &__nav {
     display: flex;
+    align-items: center;
     gap: 1.25rem;
 
     a {
@@ -34,9 +36,63 @@
       }
     }
   }
+
+  &__cta {
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    background: #0b6ef0;
+    color: #fff !important;
+    font-size: 0.9rem;
+
+    &:hover {
+      background: #0a63d6;
+    }
+  }
+
+  &__user {
+    color: #42526e;
+    font-weight: 600;
+    font-size: 0.9rem;
+    max-width: 12rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__signout {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid #d6deeb;
+    border-radius: 999px;
+    background: #fff;
+    color: #42526e;
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #0b6ef0;
+      color: #0b6ef0;
+    }
+  }
 }
 
 .app-main {
   flex: 1;
   padding: 1.5rem 2rem;
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    flex-wrap: wrap;
+    padding: 1rem;
+
+    &__nav {
+      gap: 0.85rem;
+      flex-wrap: wrap;
+    }
+  }
+
+  .app-main {
+    padding: 1rem;
+  }
 }

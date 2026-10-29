@@ -1,6 +1,7 @@
 import { AfterViewChecked, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../core/models/chat';
+import { AuthService } from '../../core/services/auth.service';
 import { ChatService } from '../../core/services/chat.service';
 
 const SESSION_KEY = 'trip-planner-chat-session';
@@ -13,7 +14,14 @@ const SESSION_KEY = 'trip-planner-chat-session';
 })
 export class Chatbot implements AfterViewChecked {
   private readonly chatService = inject(ChatService);
+  private readonly auth = inject(AuthService);
   private readonly messagesContainer = viewChild<ElementRef<HTMLDivElement>>('messagesContainer');
+
+  readonly suggestions = [
+    'Plan a 5-day trip to Ella',
+    'Weekend getaway to Kandy under 50,000 LKR',
+    'Best time to visit Sigiriya'
+  ];
 
   readonly messages = signal<ChatMessage[]>([
     {
@@ -26,12 +34,7 @@ export class Chatbot implements AfterViewChecked {
 
   readonly sending = signal(false);
   readonly error = signal<string | null>(null);
-
-  readonly suggestions = [
-    'Plan a 5-day trip to Ella',
-    'Weekend getaway to Kandy under 50,000 LKR',
-    'Best time to visit Sigiriya'
-  ];
+  readonly userLabel = this.auth.displayName();
 
   draft = '';
 
@@ -85,6 +88,12 @@ export class Chatbot implements AfterViewChecked {
       },
       error: (err) => {
         this.sending.set(false);
+
+        if (err?.status === 401) {
+          this.error.set('Your session has expired. Please sign in again.');
+          return;
+        }
+
         this.draft = message;
         this.error.set(
           err?.error?.error ?? 'Could not reach the AI assistant. Please make sure the backend is running.'
@@ -101,14 +110,17 @@ export class Chatbot implements AfterViewChecked {
   }
 
   private loadSessionId(): string {
+    const userId = this.auth.user()?.id ?? 'anonymous';
+    const key = `${SESSION_KEY}:${userId}`;
+
     try {
-      const existing = sessionStorage.getItem(SESSION_KEY);
+      const existing = localStorage.getItem(key);
       if (existing) {
         return existing;
       }
 
       const created = crypto.randomUUID();
-      sessionStorage.setItem(SESSION_KEY, created);
+      localStorage.setItem(key, created);
       return created;
     } catch {
       return crypto.randomUUID();

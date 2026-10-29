@@ -5,6 +5,16 @@
       Create trips, generate AI-powered itineraries and chat with a travel assistant
       that understands your plans.
     </p>
-    <a class="landing__cta" routerLink="/chat">Chat with the AI assistant</a>
+
+    @if (auth.isAuthenticated()) {
+      <a class="landing__cta" routerLink="/chat">Continue planning</a>
+      <p class="landing__note">Signed in as {{ auth.displayName() }}</p>
+    } @else {
+      <div class="landing__actions">
+        <a class="landing__cta" routerLink="/register">Create a free account</a>
+        <a class="landing__secondary" routerLink="/login">I already have an account</a>
+      </div>
+      <p class="landing__note">The AI assistant is available to signed-in users.</p>
+    }
   </div>
 </section>

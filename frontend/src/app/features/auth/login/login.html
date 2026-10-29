@@ -1,0 +1,46 @@
+<section class="auth">
+  <h1 class="auth__title">Welcome back</h1>
+  <p class="auth__subtitle">Sign in to chat with your AI travel assistant.</p>
+
+  @if (error()) {
+    <p class="auth__error" role="alert">{{ error() }}</p>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="auth__field" [class.auth__field--invalid]="isInvalid('emailOrUserName')">
+      <label for="emailOrUserName">Email or username</label>
+      <input
+        id="emailOrUserName"
+        type="text"
+        formControlName="emailOrUserName"
+        autocomplete="username"
+        placeholder="you@example.com"
+      />
+      @if (isInvalid('emailOrUserName')) {
+        <small>Email or username is required.</small>
+      }
+    </div>
+
+    <div class="auth__field" [class.auth__field--invalid]="isInvalid('password')">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        autocomplete="current-password"
+        placeholder="Your password"
+      />
+      @if (isInvalid('password')) {
+        <small>Password is required.</small>
+      }
+    </div>
+
+    <button class="auth__submit" type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Signing in...' : 'Sign in' }}
+    </button>
+  </form>
+
+  <p class="auth__footer">
+    New here? <a routerLink="/register">Create an account</a>
+  </p>
+</section>

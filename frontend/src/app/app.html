@@ -5,6 +5,14 @@
       Home
     </a>
     <a routerLink="/chat" routerLinkActive="app-header__link--active">AI Assistant</a>
+
+    @if (auth.isAuthenticated()) {
+      <span class="app-header__user">{{ auth.displayName() }}</span>
+      <button class="app-header__signout" type="button" (click)="signOut()">Sign out</button>
+    } @else {
+      <a routerLink="/login" routerLinkActive="app-header__link--active">Sign in</a>
+      <a class="app-header__cta" routerLink="/register">Create account</a>
+    }
   </nav>
 </header>
 

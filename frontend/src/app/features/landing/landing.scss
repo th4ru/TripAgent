@@ -25,6 +25,15 @@
     }
   }
 
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
   &__cta {
     display: inline-block;
     padding: 0.75rem 1.75rem;
@@ -37,5 +46,21 @@
     &:hover {
       background: #0a63d6;
     }
+  }
+
+  &__secondary {
+    color: #0b6ef0;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__note {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #7b8794;
   }
 }

@@ -2,7 +2,12 @@
   <header class="chat__header">
     <div>
       <h1>AI Travel Assistant</h1>
-      <p>Powered by your n8n travel agent</p>
+      <p>
+        Powered by your n8n travel agent
+        @if (userLabel) {
+          <span> · {{ userLabel }}</span>
+        }
+      </p>
     </div>
   </header>
 
