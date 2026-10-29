@@ -40,7 +40,12 @@ public static class DependencyInjection
         }
 
         services.AddSingleton(settings);
-        services.AddSingleton<IMongoClient>(_ => new MongoClient(settings.ConnectionString));
+        services.AddSingleton<IMongoClient>(_ =>
+        {
+            var clientSettings = MongoClientSettings.FromConnectionString(settings.ConnectionString);
+            clientSettings.ServerSelectionTimeout = TimeSpan.FromSeconds(5);
+            return new MongoClient(clientSettings);
+        });
         services.AddSingleton<MongoDbContext>();
         services.AddSingleton<MongoDbInitializer>();
     }
