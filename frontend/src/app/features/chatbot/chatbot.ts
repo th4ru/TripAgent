@@ -1,31 +1,22 @@
 import { AfterViewChecked, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../core/models/chat';
+import { AuthService } from '../../core/services/auth.service';
 import { ChatService } from '../../core/services/chat.service';
+import { AgenticBackdrop } from '../../shared/components/agentic-backdrop/agentic-backdrop';
 
 const SESSION_KEY = 'trip-planner-chat-session';
 
 @Component({
   selector: 'app-chatbot',
-  imports: [FormsModule],
+  imports: [FormsModule, AgenticBackdrop],
   templateUrl: './chatbot.html',
   styleUrl: './chatbot.scss'
 })
 export class Chatbot implements AfterViewChecked {
   private readonly chatService = inject(ChatService);
+  private readonly auth = inject(AuthService);
   private readonly messagesContainer = viewChild<ElementRef<HTMLDivElement>>('messagesContainer');
-
-  readonly messages = signal<ChatMessage[]>([
-    {
-      id: crypto.randomUUID(),
-      role: 'assistant',
-      text: 'Hi! I am your AI travel assistant. Tell me where you want to go and I will help you plan the trip.',
-      createdAt: new Date()
-    }
-  ]);
-
-  readonly sending = signal(false);
-  readonly error = signal<string | null>(null);
 
   readonly suggestions = [
     'Plan a 5-day trip to Ella',
@@ -33,9 +24,14 @@ export class Chatbot implements AfterViewChecked {
     'Best time to visit Sigiriya'
   ];
 
+  readonly messages = signal<ChatMessage[]>([createWelcomeMessage()]);
+  readonly sending = signal(false);
+  readonly error = signal<string | null>(null);
+  readonly userLabel = this.auth.displayName();
+
   draft = '';
 
-  private readonly sessionId = this.loadSessionId();
+  private readonly sessionId = signal(this.loadSessionId());
   private shouldScroll = false;
 
   ngAfterViewChecked(): void {
@@ -62,6 +58,21 @@ export class Chatbot implements AfterViewChecked {
     }
   }
 
+  newChat(): void {
+    if (this.sending()) {
+      return;
+    }
+
+    const sessionId = crypto.randomUUID();
+    this.sessionId.set(sessionId);
+    this.persistSessionId(sessionId);
+
+    this.messages.set([createWelcomeMessage()]);
+    this.error.set(null);
+    this.draft = '';
+    this.shouldScroll = true;
+  }
+
   send(): void {
     const message = this.draft.trim();
     if (!message || this.sending()) {
@@ -74,7 +85,7 @@ export class Chatbot implements AfterViewChecked {
     this.sending.set(true);
     this.shouldScroll = true;
 
-    this.chatService.send(message, this.sessionId).subscribe({
+    this.chatService.send(message, this.sessionId()).subscribe({
       next: (response) => {
         this.append({
           role: 'assistant',
@@ -85,6 +96,12 @@ export class Chatbot implements AfterViewChecked {
       },
       error: (err) => {
         this.sending.set(false);
+
+        if (err?.status === 401) {
+          this.error.set('Your session has expired. Please sign in again.');
+          return;
+        }
+
         this.draft = message;
         this.error.set(
           err?.error?.error ?? 'Could not reach the AI assistant. Please make sure the backend is running.'
@@ -100,18 +117,39 @@ export class Chatbot implements AfterViewChecked {
     ]);
   }
 
+  private sessionStorageKey(): string {
+    return `${SESSION_KEY}:${this.auth.user()?.id ?? 'anonymous'}`;
+  }
+
   private loadSessionId(): string {
     try {
-      const existing = sessionStorage.getItem(SESSION_KEY);
+      const existing = localStorage.getItem(this.sessionStorageKey());
       if (existing) {
         return existing;
       }
-
-      const created = crypto.randomUUID();
-      sessionStorage.setItem(SESSION_KEY, created);
-      return created;
     } catch {
-      return crypto.randomUUID();
+      // Storage unavailable; fall through to an in-memory id.
+    }
+
+    const created = crypto.randomUUID();
+    this.persistSessionId(created);
+    return created;
+  }
+
+  private persistSessionId(sessionId: string): void {
+    try {
+      localStorage.setItem(this.sessionStorageKey(), sessionId);
+    } catch {
+      // Ignore storage failures.
     }
   }
+}
+
+function createWelcomeMessage(): ChatMessage {
+  return {
+    id: crypto.randomUUID(),
+    role: 'assistant',
+    text: 'Hi! I am your AI travel assistant. Tell me where you want to go and I will help you plan the trip.',
+    createdAt: new Date()
+  };
 }

@@ -1,10 +1,93 @@
 <section class="landing">
-  <div class="landing__hero">
-    <h1>Plan smarter trips with AI</h1>
-    <p>
-      Create trips, generate AI-powered itineraries and chat with a travel assistant
-      that understands your plans.
-    </p>
-    <a class="landing__cta" routerLink="/chat">Chat with the AI assistant</a>
+  <div class="landing__bg" aria-hidden="true">
+    <app-agentic-backdrop />
+  </div>
+
+  <div class="landing__content">
+    <div class="landing__hero">
+      <span class="landing__badge">
+        <span class="landing__pulse"></span>
+        Agentic planning &middot; n8n powered
+      </span>
+
+      <h1>
+        Plan trips by talking.
+        <span>Let the agent do the rest.</span>
+      </h1>
+
+      <p class="landing__lead">
+        Describe where you want to go, your dates and your budget. Your travel agent drafts
+        day-by-day itineraries, adapts them on request, and remembers every detail of the trip.
+      </p>
+
+      @if (auth.isAuthenticated()) {
+        <div class="landing__actions">
+          <a class="landing__cta" routerLink="/chat">Open the assistant</a>
+        </div>
+        <p class="landing__note">Signed in as {{ auth.displayName() }}. Your conversation is waiting.</p>
+      } @else {
+        <div class="landing__actions">
+          <a class="landing__cta" routerLink="/register">Start planning free</a>
+          <a class="landing__secondary" routerLink="/login">Sign in</a>
+        </div>
+        <p class="landing__note">Free account &middot; no card required &middot; your own private chat thread</p>
+      }
+
+      <ul class="landing__trust">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+          Personalised itineraries
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+          Budget-aware suggestions
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+          Remembers your trip
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="landing__features">
+    <article class="landing__feature">
+      <span class="landing__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z" />
+          <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z" />
+        </svg>
+      </span>
+      <h3>Conversational planning</h3>
+      <p>Say it in your own words. The agent asks the right follow-ups instead of making you fill in forms.</p>
+    </article>
+
+    <article class="landing__feature">
+      <span class="landing__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12a8.5 8.5 0 0 1-8.5 8.5H8l-4 2.5v-5A8.5 8.5 0 0 1 12.5 3.5h.5A8 8 0 0 1 21 11.5V12Z" />
+          <path d="M8.5 10h7M8.5 13.5h4.5" />
+        </svg>
+      </span>
+      <h3>Context that sticks</h3>
+      <p>Every thread remembers your dates, pace and budget, so you never repeat yourself mid-plan.</p>
+    </article>
+
+    <article class="landing__feature">
+      <span class="landing__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4Z" />
+          <path d="M9 4v13M15 6.5v13" />
+        </svg>
+      </span>
+      <h3>Ready-to-use itineraries</h3>
+      <p>Turn a conversation into a day-by-day plan, then refine it with a single message.</p>
+    </article>
   </div>
 </section>

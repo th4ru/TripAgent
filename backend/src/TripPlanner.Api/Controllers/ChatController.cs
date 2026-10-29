@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using TripPlanner.Application.Chat;
@@ -6,6 +8,7 @@ using TripPlanner.Infrastructure.N8n;
 namespace TripPlanner.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class ChatController : ControllerBase
 {
@@ -32,9 +35,15 @@ public class ChatController : ControllerBase
                 new { error = "The AI assistant is not configured yet. Set N8n:WebhookUrl in configuration." });
         }
 
+        // Scope the conversation to the signed-in user so sessions cannot be shared or hijacked.
+        string userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "anonymous";
+        string sessionId = string.IsNullOrWhiteSpace(request.SessionId)
+            ? userId
+            : $"{userId}:{request.SessionId}";
+
         try
         {
-            ChatReply reply = await _chatAgent.SendAsync(request, cancellationToken);
+            ChatReply reply = await _chatAgent.SendAsync(request with { SessionId = sessionId }, cancellationToken);
             return Ok(new { reply = reply.Reply, sessionId = reply.SessionId });
         }
         catch (Exception ex)

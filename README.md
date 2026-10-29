@@ -94,7 +94,39 @@ npm start        # http://localhost:4200  (proxies /api to http://localhost:5047
 Use a `.env`/environment technique for API URLs in later phases; dev proxying is already
 configured in `frontend/proxy.conf.json`.
 
-## 4. AI assistant (n8n)
+## 4. Authentication
+
+Accounts are required: `/chat` and `POST /api/chat` are protected. Unauthenticated visitors
+are redirected to `/login`, and the API answers `401` without a valid token.
+
+Endpoints:
+
+| Method | Route | Auth | Purpose |
+| --- | --- | --- | --- |
+| `POST` | `/api/auth/register` | anonymous | Create an account, returns a JWT |
+| `POST` | `/api/auth/login` | anonymous | Sign in with email/username + password |
+| `GET` | `/api/auth/me` | bearer | Current user profile |
+| `POST` | `/api/chat` | bearer | Talk to the n8n agent |
+
+Configure the signing key in `appsettings.Development.json` (gitignored) — it must be at
+least 32 characters:
+
+```json
+{
+  "Jwt": {
+    "Issuer": "TripPlanner.Api",
+    "Audience": "TripPlanner.Client",
+    "Key": "<random string of 32+ characters>",
+    "ExpiryMinutes": 1440
+  }
+}
+```
+
+For production use `Jwt__Key` (or a secret store). Passwords are hashed with PBKDF2-SHA256
+(100,000 iterations, per-user salt); tokens are standard HS256 JWTs. New users get the
+`User` role automatically.
+
+## 5. AI assistant (n8n)
 
 The Angular chat page calls our API (`POST /api/chat`), and the API calls your n8n agent.
 Configure the webhook in `backend/src/TripPlanner.Api/appsettings.Development.json`:
@@ -115,8 +147,29 @@ Configure the webhook in `backend/src/TripPlanner.Api/appsettings.Development.js
 - The API sends `{ "action": "sendMessage", "sessionId": "...", "chatInput": "...", "message": "..." }`
   and extracts the reply from `reply`, `output`, `text`, `answer`, `response`, `message` or `content`.
 - The chat UI lives at `/chat` (nav link: **AI Assistant**).
+- Each conversation has its own `sessionId` (stored per user in `localStorage`). The API
+  prefixes it with the user id, so n8n memory is private and cannot be shared between accounts.
+- **New chat** in the chat header generates a fresh `sessionId` and clears the transcript,
+  which resets the agent's memory for a brand-new conversation.
 
-## Current status (Phase 1)
+The marketing page lives at `/home` and uses a dependency-free canvas "neural network"
+background (`features/landing/neural-background`) that reacts to the pointer and falls back to
+a single static frame when `prefers-reduced-motion` is set.
+
+### Routes
+
+| Route | Access | Page |
+| --- | --- | --- |
+| `/` | -> `/chat` | Redirects to the assistant (the app's home page) |
+| `/chat` | signed in | AI assistant (default landing page after sign-in) |
+| `/home` | public | Marketing / overview page |
+| `/login` | guests | Sign in |
+| `/register` | guests | Create an account |
+
+The header marks the current page: the active nav link gets a filled blue pill, an inset ring
+and a dot marker, plus `aria-current="page"` for screen readers.
+
+## Current status
 
 - [x] .NET 8 solution with layered architecture (Api / Application / Domain / Infrastructure)
 - [x] Angular 20 app with feature-based folder structure
@@ -125,7 +178,7 @@ Configure the webhook in `backend/src/TripPlanner.Api/appsettings.Development.js
 - [x] Index creation + `User` / `Admin` role seeding on startup
 - [x] Health endpoint verifying DB connectivity
 - [x] AI chat UI (`/chat`) + `POST /api/chat` proxy to n8n agent
-- [ ] Authentication & JWT            (Phase 2)
+- [x] Authentication & JWT: register / login / me, guarded `/chat`, PBKDF2 password hashing (Phase 2)
 - [ ] Trip CRUD + dashboard           (Phase 3)
 - [ ] Itinerary model + UI            (Phase 4)
 - [ ] n8n integration / AI planning   (Phase 5)

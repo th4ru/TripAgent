@@ -1,13 +1,15 @@
 :host {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
 }
 
 .app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   padding: 1rem 2rem;
   border-bottom: 1px solid #e5e8ef;
   background: #fff;
@@ -21,17 +23,93 @@
 
   &__nav {
     display: flex;
-    gap: 1.25rem;
+    align-items: center;
+    gap: 0.4rem;
+  }
 
-    a {
-      color: #42526e;
-      text-decoration: none;
-      font-weight: 500;
+  &__link {
+    position: relative;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    color: #42526e;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.92rem;
+    transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
 
-      &:hover,
-      &--active {
-        color: #0b6ef0;
+    &:hover {
+      background: #f2f6fc;
+      color: #0b6ef0;
+    }
+
+    // Current page: filled pill + underline dot, so it is unmistakable.
+    &--active {
+      background: #e8f1ff;
+      color: #0b6ef0;
+      font-weight: 700;
+      box-shadow: inset 0 0 0 1px #c7ddff;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -0.3rem;
+        width: 0.3rem;
+        height: 0.3rem;
+        border-radius: 50%;
+        background: #0b6ef0;
+        transform: translateX(-50%);
       }
+    }
+
+    &--auth {
+      margin-left: 0.3rem;
+    }
+  }
+
+  &__cta {
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    background: #0b6ef0;
+    color: #fff !important;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.18s ease, box-shadow 0.18s ease;
+
+    &:hover {
+      background: #0a63d6;
+    }
+
+    &--active {
+      box-shadow: 0 0 0 3px rgba(11, 110, 240, 0.25);
+    }
+  }
+
+  &__user {
+    margin-left: 0.6rem;
+    color: #42526e;
+    font-weight: 600;
+    font-size: 0.9rem;
+    max-width: 12rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__signout {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid #d6deeb;
+    border-radius: 999px;
+    background: #fff;
+    color: #42526e;
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #0b6ef0;
+      color: #0b6ef0;
     }
   }
 }
@@ -39,4 +117,30 @@
 .app-main {
   flex: 1;
   padding: 1.5rem 2rem;
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    flex-wrap: wrap;
+    padding: 1rem;
+
+    &__nav {
+      gap: 0.3rem;
+      flex-wrap: wrap;
+    }
+
+    &__link {
+      padding: 0.4rem 0.7rem;
+      font-size: 0.88rem;
+    }
+
+    &__user {
+      margin-left: 0.2rem;
+      max-width: 8rem;
+    }
+  }
+
+  .app-main {
+    padding: 1rem;
+  }
 }
