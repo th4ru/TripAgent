@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { NeuralBackground } from './neural-background/neural-background';
+import { AgenticBackdrop } from '../../shared/components/agentic-backdrop/agentic-backdrop';
 
 @Component({
   selector: 'app-landing',
-  imports: [RouterLink, NeuralBackground],
+  imports: [RouterLink, AgenticBackdrop],
   templateUrl: './landing.html',
   styleUrl: './landing.scss'
 })

@@ -3,35 +3,72 @@
 }
 
 .chat {
+  position: relative;
   display: flex;
   flex-direction: column;
-  max-width: 880px;
-  height: calc(100vh - 180px);
-  min-height: 480px;
-  margin: 0 auto;
-  background: #fff;
-  border: 1px solid #e5e8ef;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  // Full-bleed over the shell padding, same trick as the landing page.
+  margin: -1.5rem -2rem;
+  padding: 1.5rem 2rem;
+  min-height: calc(100vh - 68px);
+  background:
+    radial-gradient(1000px 520px at 12% -10%, #14224a 0%, transparent 62%),
+    radial-gradient(900px 520px at 92% 18%, #0c2745 0%, transparent 58%),
+    #060a16;
+  color: #e8eefb;
   overflow: hidden;
+  isolation: isolate;
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  &__panel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(9, 15, 30, 0.62);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow:
+      0 30px 80px rgba(2, 8, 23, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+  }
 
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.9rem 1.25rem;
-    border-bottom: 1px solid #e5e8ef;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent);
 
     h1 {
       margin: 0;
       font-size: 1.1rem;
+      letter-spacing: -0.01em;
+      color: #f2f6ff;
     }
 
     p {
-      margin: 0.15rem 0 0;
-      font-size: 0.85rem;
-      color: #5b6574;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0.2rem 0 0;
+      font-size: 0.82rem;
+      color: #93a2bd;
     }
   }
 
@@ -42,19 +79,31 @@
     min-width: 0;
   }
 
+  &__status {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6);
+    animation: pulse 2.4s infinite;
+  }
+
   &__orb {
+    position: relative;
     flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.3rem;
-    height: 2.3rem;
+    width: 2.4rem;
+    height: 2.4rem;
     border-radius: 50%;
-    background: linear-gradient(135deg, #2563eb, #0ea5e9);
+    background: linear-gradient(135deg, #2563eb, #0ea5e9 60%, #22d3ee);
     color: #fff;
     font-size: 0.72rem;
     font-weight: 700;
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.28);
+    box-shadow:
+      0 0 0 1px rgba(125, 211, 252, 0.35),
+      0 8px 24px rgba(14, 165, 233, 0.45);
   }
 
   &__new {
@@ -62,16 +111,17 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.5rem 0.9rem;
-    border: 1px solid #d6deeb;
+    padding: 0.5rem 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 999px;
-    background: #fff;
-    color: #0b6ef0;
+    background: rgba(255, 255, 255, 0.05);
+    color: #cfe0ff;
     font: inherit;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
+    transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease;
 
     svg {
       width: 1rem;
@@ -79,24 +129,36 @@
     }
 
     &:hover:not(:disabled) {
-      border-color: #0b6ef0;
-      background: #f2f7ff;
+      border-color: rgba(125, 211, 252, 0.6);
+      background: rgba(125, 211, 252, 0.12);
+      color: #e8f5ff;
     }
 
     &:disabled {
-      opacity: 0.5;
+      opacity: 0.45;
       cursor: default;
     }
   }
 
   &__messages {
     flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    padding: 1.25rem;
+    gap: 0.85rem;
+    padding: 1.4rem 1.25rem;
     overflow-y: auto;
-    background: #f9fbfe;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 178, 255, 0.3) transparent;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(148, 178, 255, 0.22);
+    }
   }
 
   &__message {
@@ -108,14 +170,16 @@
       flex-direction: row-reverse;
 
       .chat__bubble {
-        background: #0b6ef0;
+        background: linear-gradient(135deg, #2563eb, #0ea5e9);
+        border-color: transparent;
         color: #fff;
-        border-color: #0b6ef0;
+        box-shadow: 0 10px 26px rgba(14, 165, 233, 0.28);
       }
 
       .chat__avatar {
-        background: #e0ecff;
-        color: #0b6ef0;
+        background: rgba(37, 99, 235, 0.25);
+        border-color: rgba(125, 211, 252, 0.4);
+        color: #bfe3ff;
       }
     }
   }
@@ -129,32 +193,38 @@
     height: 2.1rem;
     padding: 0 0.35rem;
     border-radius: 999px;
-    background: #eef2f8;
-    color: #42526e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.06);
+    color: #a9c4ff;
     font-size: 0.7rem;
     font-weight: 700;
   }
 
   &__bubble {
     max-width: 74%;
-    padding: 0.65rem 0.9rem;
-    border-radius: 12px;
-    background: #fff;
-    border: 1px solid #e5e8ef;
+    padding: 0.7rem 0.95rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom-left-radius: 4px;
+    background: rgba(255, 255, 255, 0.055);
+    color: #dbe4f5;
+    font-size: 0.94rem;
+    line-height: 1.55;
     white-space: pre-wrap;
     word-break: break-word;
 
     &--typing {
       display: inline-flex;
-      gap: 0.3rem;
       align-items: center;
-      padding: 0.85rem 1rem;
+      gap: 0.3rem;
+      padding: 0.9rem 1rem;
 
       span {
         width: 0.45rem;
         height: 0.45rem;
         border-radius: 50%;
-        background: #9aa5b5;
+        background: #7dd3fc;
+        opacity: 0.45;
         animation: typing 1.2s infinite ease-in-out;
 
         &:nth-child(2) {
@@ -170,35 +240,39 @@
 
   &__error {
     margin: 0;
-    padding: 0.6rem 1.25rem;
-    background: #fdecec;
-    color: #b42318;
-    font-size: 0.9rem;
+    padding: 0.65rem 1.25rem;
+    border-top: 1px solid rgba(248, 113, 113, 0.25);
+    background: rgba(248, 113, 113, 0.12);
+    color: #fca5a5;
+    font-size: 0.88rem;
   }
 
   &__suggestions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    border-top: 1px solid #eef2f8;
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
 
     button {
-      padding: 0.35rem 0.8rem;
-      border: 1px solid #d6deeb;
+      padding: 0.4rem 0.85rem;
+      border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: 999px;
-      background: #fff;
-      color: #42526e;
+      background: rgba(255, 255, 255, 0.04);
+      color: #b9c6dd;
+      font: inherit;
       font-size: 0.82rem;
       cursor: pointer;
+      transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease;
 
       &:hover:not(:disabled) {
-        border-color: #0b6ef0;
-        color: #0b6ef0;
+        border-color: rgba(125, 211, 252, 0.55);
+        background: rgba(125, 211, 252, 0.1);
+        color: #e8f5ff;
       }
 
       &:disabled {
-        opacity: 0.55;
+        opacity: 0.5;
         cursor: default;
       }
     }
@@ -206,47 +280,69 @@
 
   &__composer {
     display: flex;
+    align-items: flex-end;
     gap: 0.75rem;
-    padding: 1rem 1.25rem 1.25rem;
-    border-top: 1px solid #e5e8ef;
+    padding: 1rem 1.25rem 1.15rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(0deg, rgba(5, 9, 20, 0.55), transparent);
 
     textarea {
       flex: 1;
       resize: none;
-      padding: 0.65rem 0.85rem;
-      border: 1px solid #d6deeb;
-      border-radius: 10px;
+      padding: 0.7rem 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 12px;
+      background: rgba(6, 11, 24, 0.72);
       font: inherit;
-      color: inherit;
+      color: #e8eefb;
+      caret-color: #7dd3fc;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+
+      &::placeholder {
+        color: #6b7890;
+      }
 
       &:focus {
-        outline: 2px solid #cfe0ff;
-        border-color: #0b6ef0;
+        outline: none;
+        border-color: rgba(56, 189, 248, 0.7);
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
       }
 
       &:disabled {
-        background: #f3f6fa;
+        background: rgba(6, 11, 24, 0.45);
+        color: #7f8aa3;
       }
     }
 
     button {
-      align-self: flex-end;
-      padding: 0.65rem 1.35rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.7rem 1.3rem;
       border: none;
-      border-radius: 10px;
-      background: #0b6ef0;
+      border-radius: 12px;
+      background: linear-gradient(120deg, #2563eb, #0ea5e9 60%, #22d3ee);
       color: #fff;
       font: inherit;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
+      box-shadow: 0 10px 26px rgba(14, 165, 233, 0.32);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
 
       &:hover:not(:disabled) {
-        background: #0a63d6;
+        transform: translateY(-1px);
+        box-shadow: 0 14px 32px rgba(14, 165, 233, 0.4);
       }
 
       &:disabled {
-        opacity: 0.5;
+        opacity: 0.4;
         cursor: default;
+        box-shadow: none;
       }
     }
   }
@@ -266,12 +362,70 @@
   }
 }
 
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px rgba(52, 211, 153, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+  }
+}
+
 @media (max-width: 640px) {
   .chat {
-    height: calc(100vh - 140px);
+    margin: -1rem;
+    padding: 1rem;
+    min-height: calc(100vh - 68px);
+
+    &__panel {
+      border-radius: 16px;
+    }
+
+    &__header {
+      padding: 0.85rem 1rem;
+
+      h1 {
+        font-size: 1rem;
+      }
+
+      p {
+        font-size: 0.76rem;
+      }
+    }
+
+    &__messages {
+      padding: 1rem;
+    }
 
     &__bubble {
-      max-width: 85%;
+      max-width: 86%;
+      font-size: 0.9rem;
+    }
+
+    &__suggestions {
+      padding: 0.7rem 1rem;
+    }
+
+    &__composer {
+      padding: 0.8rem 1rem 1rem;
+
+      button span {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat {
+    &__status,
+    &__bubble--typing span {
+      animation: none;
     }
   }
 }

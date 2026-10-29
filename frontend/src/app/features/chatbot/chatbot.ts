@@ -3,12 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../core/models/chat';
 import { AuthService } from '../../core/services/auth.service';
 import { ChatService } from '../../core/services/chat.service';
+import { AgenticBackdrop } from '../../shared/components/agentic-backdrop/agentic-backdrop';
 
 const SESSION_KEY = 'trip-planner-chat-session';
 
 @Component({
   selector: 'app-chatbot',
-  imports: [FormsModule],
+  imports: [FormsModule, AgenticBackdrop],
   templateUrl: './chatbot.html',
   styleUrl: './chatbot.scss'
 })

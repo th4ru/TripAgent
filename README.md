@@ -152,9 +152,22 @@ Configure the webhook in `backend/src/TripPlanner.Api/appsettings.Development.js
 - **New chat** in the chat header generates a fresh `sessionId` and clears the transcript,
   which resets the agent's memory for a brand-new conversation.
 
-The landing page (`/`) uses a dependency-free canvas "neural network" background
-(`features/landing/neural-background`) that reacts to the pointer and falls back to a single
-static frame when `prefers-reduced-motion` is set.
+The marketing page lives at `/home` and uses a dependency-free canvas "neural network"
+background (`features/landing/neural-background`) that reacts to the pointer and falls back to
+a single static frame when `prefers-reduced-motion` is set.
+
+### Routes
+
+| Route | Access | Page |
+| --- | --- | --- |
+| `/` | -> `/chat` | Redirects to the assistant (the app's home page) |
+| `/chat` | signed in | AI assistant (default landing page after sign-in) |
+| `/home` | public | Marketing / overview page |
+| `/login` | guests | Sign in |
+| `/register` | guests | Create an account |
+
+The header marks the current page: the active nav link gets a filled blue pill, an inset ring
+and a dot marker, plus `aria-current="page"` for screen readers.
 
 ## Current status
 
