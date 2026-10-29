@@ -116,7 +116,11 @@
 
 .app-main {
   flex: 1;
-  padding: 1.5rem 2rem;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  // Pages own their padding so they can run full-bleed to the viewport edges.
+  padding: 0;
 }
 
 @media (max-width: 640px) {
@@ -138,9 +142,5 @@
       margin-left: 0.2rem;
       max-width: 8rem;
     }
-  }
-
-  .app-main {
-    padding: 1rem;
   }
 }

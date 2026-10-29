@@ -6,10 +6,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  // Full-bleed over the shell padding, same trick as the landing page.
-  margin: -1.5rem -2rem;
   padding: 1.5rem 2rem;
-  min-height: calc(100vh - 68px);
+  min-height: calc(100dvh - 68px);
+  min-height: 100%;
   background:
     radial-gradient(1000px 520px at 12% -10%, #14224a 0%, transparent 62%),
     radial-gradient(900px 520px at 92% 18%, #0c2745 0%, transparent 58%),
@@ -378,9 +377,8 @@
 
 @media (max-width: 640px) {
   .chat {
-    margin: -1rem;
     padding: 1rem;
-    min-height: calc(100vh - 68px);
+    min-height: 100%;
 
     &__panel {
       border-radius: 16px;
