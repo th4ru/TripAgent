@@ -4,10 +4,8 @@
 
 .landing {
   position: relative;
-  // Bleed out of the shell padding instead of using 100vw, so the layout stays
-  // aligned with the header even when a vertical scrollbar is present.
-  margin: -1.5rem -2rem;
-  min-height: calc(100vh - 68px);
+  min-height: calc(100dvh - 68px);
+  min-height: 100%;
   background:
     radial-gradient(1000px 520px at 12% -10%, #14224a 0%, transparent 62%),
     radial-gradient(900px 520px at 92% 18%, #0c2745 0%, transparent 58%),
@@ -245,7 +243,6 @@
 @media (max-width: 640px) {
   .landing {
     min-height: auto;
-    margin: -1rem;
 
     &__content {
       padding: 2.25rem 1.15rem 1.75rem;
