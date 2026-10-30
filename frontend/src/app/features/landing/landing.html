@@ -3,28 +3,28 @@
     <app-agentic-backdrop />
   </div>
 
-  <div class="landing__content">
-    <div class="landing__hero">
+  <div class="landing__hero">
+    <div class="landing__intro">
       <span class="landing__badge">
         <span class="landing__pulse"></span>
-        Agentic planning &middot; n8n powered
+        Your AI trip agent &middot; n8n powered
       </span>
 
       <h1>
-        Plan trips by talking.
-        <span>Let the agent do the rest.</span>
+        Plan your whole trip
+        <span>just by talking.</span>
       </h1>
 
       <p class="landing__lead">
-        Describe where you want to go, your dates and your budget. Your travel agent drafts
-        day-by-day itineraries, adapts them on request, and remembers every detail of the trip.
+        Tell your trip agent where you want to go, your dates and your budget. It drafts a
+        day-by-day itinerary, adapts it on request, and remembers every detail of the journey.
       </p>
 
       @if (auth.isAuthenticated()) {
         <div class="landing__actions">
-          <a class="landing__cta" routerLink="/chat">Open the assistant</a>
+          <a class="landing__cta" routerLink="/chat">Continue planning</a>
         </div>
-        <p class="landing__note">Signed in as {{ auth.displayName() }}. Your conversation is waiting.</p>
+        <p class="landing__note">Signed in as {{ auth.displayName() }}. Your trip is waiting.</p>
       } @else {
         <div class="landing__actions">
           <a class="landing__cta" routerLink="/register">Start planning free</a>
@@ -50,24 +50,18 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M20 6 9 17l-5-5" />
           </svg>
-          Remembers your trip
+          Remembers every trip
         </li>
       </ul>
     </div>
   </div>
 
-  <div class="landing__features">
-    <article class="landing__feature">
-      <span class="landing__icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z" />
-          <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z" />
-        </svg>
-      </span>
-      <h3>Conversational planning</h3>
-      <p>Say it in your own words. The agent asks the right follow-ups instead of making you fill in forms.</p>
-    </article>
+  <div class="landing__section-head">
+    <span class="landing__eyebrow">Trip agent, at your service</span>
+    <h2>Three things it does better than a form</h2>
+  </div>
 
+  <div class="landing__features">
     <article class="landing__feature">
       <span class="landing__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -75,8 +69,8 @@
           <path d="M8.5 10h7M8.5 13.5h4.5" />
         </svg>
       </span>
-      <h3>Context that sticks</h3>
-      <p>Every thread remembers your dates, pace and budget, so you never repeat yourself mid-plan.</p>
+      <h3>Talk, don't form-fill</h3>
+      <p>Describe the trip in your own words. Your agent asks the right follow-ups instead of handing you a blank form.</p>
     </article>
 
     <article class="landing__feature">
@@ -86,8 +80,19 @@
           <path d="M9 4v13M15 6.5v13" />
         </svg>
       </span>
-      <h3>Ready-to-use itineraries</h3>
-      <p>Turn a conversation into a day-by-day plan, then refine it with a single message.</p>
+      <h3>A real day-by-day plan</h3>
+      <p>Mornings, meals, travel time and budget-aware picks, laid out and ready to refine with a single message.</p>
+    </article>
+
+    <article class="landing__feature">
+      <span class="landing__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 3h12v18l-6-4-6 4V3Z" />
+          <path d="M9 7.5h6" />
+        </svg>
+      </span>
+      <h3>Your trip stays remembered</h3>
+      <p>Dates, pace and budget stick across every message and every return visit, so you never repeat yourself.</p>
     </article>
   </div>
 </section>

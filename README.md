@@ -152,9 +152,12 @@ Configure the webhook in `backend/src/TripPlanner.Api/appsettings.Development.js
 - **New chat** in the chat header generates a fresh `sessionId` and clears the transcript,
   which resets the agent's memory for a brand-new conversation.
 
-The marketing page lives at `/home` and uses a dependency-free canvas "neural network"
-background (`features/landing/neural-background`) that reacts to the pointer and falls back to
-a single static frame when `prefers-reduced-motion` is set.
+The marketing page lives at `/home` and shares one "agentic" backdrop with the assistant: a
+dependency-free canvas "neural network" (`shared/components/neural-background`) that reacts to the
+pointer, plus drifting glows, a faint grid and a bottom fade
+(`shared/components/agentic-backdrop`). Both fall back to a single static frame when
+`prefers-reduced-motion` is set. The assistant renders it behind a dark glass chat panel so the
+same animated backdrop shows through.
 
 ### Routes
 

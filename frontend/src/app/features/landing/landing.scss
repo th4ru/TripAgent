@@ -1,16 +1,14 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
 }
 
 .landing {
   position: relative;
-  min-height: calc(100dvh - 68px);
-  min-height: 100%;
-  background:
-    radial-gradient(1000px 520px at 12% -10%, #14224a 0%, transparent 62%),
-    radial-gradient(900px 520px at 92% 18%, #0c2745 0%, transparent 58%),
-    #060a16;
-  color: #e8eefb;
+  flex: 1;
+  background: var(--tp-page-bg);
+  color: var(--tp-text);
   overflow: hidden;
   isolation: isolate;
 
@@ -21,7 +19,7 @@
     pointer-events: none;
   }
 
-  &__content {
+  &__hero {
     position: relative;
     z-index: 1;
     display: flex;
@@ -29,11 +27,11 @@
     align-items: center;
     max-width: 860px;
     margin: 0 auto;
-    padding: 5rem 2rem 3rem;
+    padding: 4.5rem 2rem 3rem;
     text-align: center;
   }
 
-  &__hero {
+  &__intro {
     min-width: 0;
     max-width: 720px;
   }
@@ -57,16 +55,16 @@
     width: 0.45rem;
     height: 0.45rem;
     border-radius: 50%;
-    background: #34d399;
+    background: var(--tp-success);
     box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
     animation: pulse 2.4s infinite;
   }
 
   h1 {
-    margin: 1.25rem 0 1rem;
-    font-size: clamp(2.1rem, 4.2vw, 3.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.025em;
+    margin: 1.2rem 0 1rem;
+    font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+    line-height: 1.04;
+    letter-spacing: -0.03em;
 
     span {
       display: block;
@@ -80,7 +78,7 @@
   &__lead {
     max-width: 54ch;
     margin: 0 auto;
-    color: #a7b3c9;
+    color: var(--tp-text-muted);
     font-size: 1.05rem;
     line-height: 1.65;
   }
@@ -98,7 +96,7 @@
     display: inline-block;
     padding: 0.8rem 1.7rem;
     border-radius: 999px;
-    background: linear-gradient(120deg, #2563eb, #0ea5e9 60%, #22d3ee);
+    background: var(--tp-gradient);
     color: #fff;
     font-weight: 700;
     text-decoration: none;
@@ -120,7 +118,7 @@
     font-weight: 600;
     text-decoration: none;
     background: rgba(255, 255, 255, 0.04);
-    transition: border-color 0.18s ease, background 0.18s ease;
+    transition: border-color 0.18s ease, background-color 0.18s ease;
 
     &:hover {
       border-color: rgba(125, 211, 252, 0.6);
@@ -130,7 +128,7 @@
 
   &__note {
     margin: 1.1rem 0 0;
-    color: #7f8aa3;
+    color: var(--tp-text-dim);
     font-size: 0.85rem;
   }
 
@@ -154,8 +152,33 @@
     svg {
       width: 1rem;
       height: 1rem;
-      color: #34d399;
+      color: var(--tp-success);
     }
+  }
+
+  // --- Feature cards ---------------------------------------------------
+
+  &__section-head {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 2rem 0.2rem;
+    text-align: center;
+
+    h2 {
+      margin: 0.35rem 0 0;
+      font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+      letter-spacing: -0.02em;
+    }
+  }
+
+  &__eyebrow {
+    color: #7dd3fc;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   &__features {
@@ -166,32 +189,67 @@
     gap: 1rem;
     max-width: 1180px;
     margin: 0 auto;
-    padding: 0 2rem 4.5rem;
+    padding: 1.2rem 2rem 4.5rem;
   }
 
   &__feature {
-    padding: 1.35rem;
-    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem 1.4rem;
+    border-radius: 18px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(13, 20, 38, 0.6);
     backdrop-filter: blur(10px);
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    animation: feature-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+    // Sheen that sweeps across the card on hover.
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 20%, rgba(125, 211, 252, 0.12) 50%, transparent 80%);
+      transform: translateX(-120%);
+      transition: transform 0.6s ease;
+      pointer-events: none;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 0.12s;
+
+      .landing__icon {
+        animation-delay: 0.5s;
+      }
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.24s;
+
+      .landing__icon {
+        animation-delay: 1s;
+      }
+    }
 
     &:hover {
-      border-color: rgba(125, 211, 252, 0.4);
-      transform: translateY(-2px);
+      transform: translateY(-6px);
+      border-color: rgba(125, 211, 252, 0.42);
+      box-shadow: 0 22px 50px rgba(2, 8, 23, 0.55);
+
+      &::before {
+        transform: translateX(120%);
+      }
     }
 
     h3 {
-      margin: 0.85rem 0 0.4rem;
-      font-size: 1rem;
+      margin: 0.9rem 0 0.45rem;
+      font-size: 1.05rem;
     }
 
     p {
       margin: 0;
       color: #93a2bd;
-      font-size: 0.88rem;
-      line-height: 1.55;
+      font-size: 0.9rem;
+      line-height: 1.6;
     }
   }
 
@@ -199,16 +257,17 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.4rem;
-    height: 2.4rem;
-    border-radius: 12px;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(34, 211, 238, 0.18));
-    border: 1px solid rgba(125, 211, 252, 0.25);
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.28), rgba(34, 211, 238, 0.18));
+    border: 1px solid rgba(125, 211, 252, 0.28);
     color: #7dd3fc;
+    animation: float 5s ease-in-out infinite;
 
     svg {
-      width: 1.3rem;
-      height: 1.3rem;
+      width: 1.4rem;
+      height: 1.4rem;
     }
   }
 }
@@ -227,37 +286,72 @@
   }
 }
 
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes feature-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @media (max-width: 960px) {
   .landing {
-    &__content {
+    &__hero {
       padding: 3.5rem 1.5rem 2.5rem;
+    }
+
+    &__section-head {
+      padding: 0 1.5rem 0.2rem;
     }
 
     &__features {
       grid-template-columns: 1fr;
-      padding: 0 1.5rem 3.5rem;
+      padding: 1.2rem 1.5rem 3.5rem;
     }
   }
 }
 
 @media (max-width: 640px) {
   .landing {
-    min-height: auto;
+    &__hero {
+      padding: 2.5rem 1.15rem 2rem;
+    }
 
-    &__content {
-      padding: 2.25rem 1.15rem 1.75rem;
+    &__section-head {
+      padding: 0 1.15rem 0.2rem;
     }
 
     &__features {
-      padding: 0 1.15rem 2.5rem;
+      padding: 1.2rem 1.15rem 2.5rem;
     }
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .landing {
-    &__pulse {
+    &__pulse,
+    &__feature,
+    &__icon {
       animation: none;
+    }
+
+    &__feature::before {
+      display: none;
     }
   }
 }

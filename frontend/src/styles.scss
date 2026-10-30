@@ -1,5 +1,28 @@
 // Global styles
 
+:root {
+  color-scheme: dark;
+
+  // Shared theme tokens (single source of truth for every page).
+  --tp-bg: #060a16;
+  --tp-surface: rgba(13, 20, 38, 0.6);
+  --tp-surface-strong: rgba(9, 15, 30, 0.72);
+  --tp-border: rgba(255, 255, 255, 0.08);
+  --tp-border-strong: rgba(255, 255, 255, 0.16);
+  --tp-text: #e8eefb;
+  --tp-text-muted: #a7b3c9;
+  --tp-text-dim: #7f8aa3;
+  --tp-accent: #7dd3fc;
+  --tp-accent-soft: #a9c4ff;
+  --tp-success: #34d399;
+  --tp-danger: #fca5a5;
+  --tp-gradient: linear-gradient(120deg, #2563eb, #0ea5e9 60%, #22d3ee);
+  --tp-page-bg:
+    radial-gradient(1000px 520px at 12% -10%, #14224a 0%, transparent 62%),
+    radial-gradient(900px 520px at 92% 18%, #0c2745 0%, transparent 58%),
+    #060a16;
+}
+
 *,
 *::before,
 *::after {
@@ -15,7 +38,12 @@ body {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  color: #1f2933;
-  background: #f6f8fb;
+  color: var(--tp-text);
+  background: var(--tp-page-bg);
+  background-attachment: fixed;
   line-height: 1.5;
+}
+
+a {
+  color: var(--tp-accent);
 }
