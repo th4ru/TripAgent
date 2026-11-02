@@ -14,6 +14,8 @@ export class App {
   /** Members go straight to the assistant; visitors land on the marketing page. */
   readonly brandLink = computed(() => (this.auth.isAuthenticated() ? '/chat' : '/home'));
 
+  readonly year = new Date().getFullYear();
+
   signOut(): void {
     this.auth.signOut('/login');
   }

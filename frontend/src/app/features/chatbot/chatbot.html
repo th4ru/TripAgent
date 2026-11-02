@@ -19,17 +19,32 @@
         </div>
       </div>
 
-      <button
-        class="chat__new"
-        type="button"
-        (click)="newChat()"
-        [disabled]="sending()"
-        title="Start a new conversation">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 5v14M5 12h14" />
-        </svg>
-        New chat
-      </button>
+      <div class="chat__actions">
+        <button
+          class="chat__history-btn"
+          type="button"
+          (click)="openHistory()"
+          title="View past conversations">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+            <path d="M3 3v5h5" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+          History
+        </button>
+
+        <button
+          class="chat__new"
+          type="button"
+          (click)="newChat()"
+          [disabled]="sending()"
+          title="Start a new conversation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          New chat
+        </button>
+      </div>
     </header>
 
     <div class="chat__messages" #messagesContainer>
@@ -79,4 +94,64 @@
       </button>
     </div>
   </div>
+
+  @if (historyOpen()) {
+    <div class="chat__scrim" (click)="closeHistory()" aria-hidden="true"></div>
+
+    <aside class="chat__drawer" role="dialog" aria-modal="true" aria-labelledby="chat-history-title">
+      <header class="chat__drawer-head">
+        <div>
+          <h2 id="chat-history-title">Chat history</h2>
+          <p>
+            {{ historyItems().length }}
+            {{ historyItems().length === 1 ? 'saved conversation' : 'saved conversations' }}
+          </p>
+        </div>
+        <button class="chat__drawer-close" type="button" (click)="closeHistory()" aria-label="Close history">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg>
+        </button>
+      </header>
+
+      @if (historyItems().length === 0) {
+        <div class="chat__drawer-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+            <path d="M3 3v5h5" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+          <p>No past chats yet</p>
+          <span>Start planning and your conversations will be saved here.</span>
+        </div>
+      } @else {
+        <ul class="chat__drawer-list">
+          @for (item of historyItems(); track item.id) {
+            <li class="chat__drawer-item" [class.chat__drawer-item--active]="item.id === sessionId()">
+              <button type="button" class="chat__drawer-open" (click)="loadConversation(item.id)">
+                <span class="chat__drawer-title">{{ item.title }}</span>
+                <span class="chat__drawer-preview">{{ item.preview }}</span>
+                <span class="chat__drawer-meta">
+                  {{ item.messageCount }} messages &middot; {{ item.updatedAt | date: 'mediumDate' }}
+                </span>
+              </button>
+              <button
+                type="button"
+                class="chat__drawer-delete"
+                (click)="deleteConversation(item.id, $event)"
+                [attr.aria-label]="'Delete ' + item.title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13" />
+                </svg>
+              </button>
+            </li>
+          }
+        </ul>
+
+        <button type="button" class="chat__drawer-clear" (click)="clearHistory()">
+          Clear all history
+        </button>
+      }
+    </aside>
+  }
 </section>
