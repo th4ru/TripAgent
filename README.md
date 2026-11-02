@@ -159,18 +159,6 @@ pointer, plus drifting glows, a faint grid and a bottom fade
 `prefers-reduced-motion` is set. The assistant renders it behind a dark glass chat panel so the
 same animated backdrop shows through.
 
-### Routes
-
-| Route | Access | Page |
-| --- | --- | --- |
-| `/` | -> `/chat` | Redirects to the assistant (the app's home page) |
-| `/chat` | signed in | AI assistant (default landing page after sign-in) |
-| `/home` | public | Marketing / overview page |
-| `/login` | guests | Sign in |
-| `/register` | guests | Create an account |
-
-The header marks the current page: the active nav link gets a filled blue pill, an inset ring
-and a dot marker, plus `aria-current="page"` for screen readers.
 
 ## Current status
 
